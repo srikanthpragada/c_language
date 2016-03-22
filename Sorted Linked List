@@ -1,0 +1,113 @@
+// Places marks read from file into linked list in sorted order 
+#include <stdio.h>
+
+struct node
+{
+    int number;
+    struct node * next;
+};
+
+main()
+{
+struct node * root = NULL, * cur, * prev, *newnode;
+
+FILE * fp;
+int  number,found;
+char line[5];
+
+  // count number of lines in marks.txt
+  fp =  fopen("f:\\c\\feb9\\marks.txt","r");
+  if (fp == NULL)
+  {
+     printf("Sorry! File not found!");
+     return;
+  }
+
+  do
+  {
+      number = read_next_number(fp);
+      if(number == -1) // EOF then stop
+        break;
+      if(number == 0)  // invalid value, ignore
+        continue;
+
+      // create new node
+      newnode = (struct node *) malloc(sizeof(struct node));
+      newnode->number = number;
+      newnode->next = NULL;
+
+      if(root == NULL){
+         root = newnode;
+      }
+      else
+      {
+          // search for a number higher than the number
+          cur = root;
+          found=0;
+          while(cur != NULL)
+          {
+            if(cur->number >= number)
+            {
+               if (cur == root)
+               {
+                 newnode->next = root;
+                 root = newnode;
+               }
+               else
+               {
+                 newnode->next = prev->next;
+                 prev->next = newnode;
+               }
+               found=1;
+               break;
+            }
+            else
+            {
+               prev = cur;
+               cur = cur ->next;
+            }
+          } // while
+
+          if(!found)  // no bigger value found, so add at the end
+          {
+            prev->next = newnode;
+          }
+      } // else
+  }
+  while(1);
+
+  fclose(fp);
+
+  // print list
+  cur = root;
+  while (cur!= NULL)
+  {
+     printf("%d\n", cur->number);
+     cur = cur->next;
+  }
+} // main()
+
+int read_next_number(FILE *fp)
+{
+ char line[10];
+
+    if(fgets(line,5,fp) == NULL)
+        return -1; // EOF
+
+    remove_newline(line);
+    if(strlen(line)>0)
+      return atoi(line); // convert string to int
+    else
+      return 0;  // invalid line
+}
+
+void  remove_newline(char *s)
+{
+    int i =0;
+
+    while(isdigit(s[i]))  // go until non-digit is found
+         i++;
+
+    s[i] = '\0';
+
+}
