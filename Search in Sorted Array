@@ -1,0 +1,57 @@
+/* search in a sorted array */
+#include <stdio.h>
+
+main()
+{
+   int a[10];
+   int i,j, temp, num, found;
+
+   srand(time(NULL));
+   for(i=0; i <10; i ++)
+      a[i] = rand() % 100;
+
+   printf("\nArray Before Sorting\n");
+   for(i=0; i <10; i ++)
+      printf("%5d",a[i]);
+
+   for(i=0; i < 9; i++)
+   {
+      for(j=i+1; j < 10; j++ )
+      {
+          if ( a[i] > a[j])
+          {
+             temp = a[i];
+             a[i] = a[j];
+             a[j] = temp;
+          }
+      }
+   }  /* end of i loop */
+
+
+   printf("\nArray after Sorting\n");
+   for(i=0; i <10; i ++)
+      printf("%5d",a[i]);
+
+   printf("\nEnter number to search : ");
+   scanf("%d",&num);
+
+   found = 0;
+   for(i=0; i <10 ; i ++)
+   {
+       if (a[i] == num)
+       {
+           found = 1;
+           break;
+       }
+       else
+         if (a[i] > num)
+             break;
+   }
+
+   if(found)
+      printf("\nFound at %d",i);
+   else
+      printf("\nNot found! Exited after %d comparisons",i + 1);
+
+
+}
