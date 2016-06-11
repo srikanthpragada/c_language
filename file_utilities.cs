@@ -1,4 +1,3 @@
-// file utilities
 
 #include <stdio.h>
 
@@ -113,6 +112,44 @@ void decrypt()
 }
 
 void file_stats()
-{  
-   // to be done
+{
+ char filename[50];
+ FILE *fp;
+ int ch, nolines =0, nowords =0, nochars=0;
+
+     // clear keyboard buffer
+     fflush(stdin);
+     printf("\nFilename : ");
+     gets(filename);
+
+     fp = fopen(filename,"r");
+     if(fp == NULL)
+     {
+         printf("\nSorry! File not found.\n");
+         return;
+     }
+
+
+     ch = fgetc(fp);
+     while ( ch!= -1)
+     {
+         nochars++;
+         if ( ch == 32){
+            nowords ++;
+         }
+         else
+            if ( ch == 10)
+            {
+               nolines++;
+               nowords++;
+            }
+
+         ch = fgetc(fp);
+     }
+
+     fclose(fp);
+
+     printf("\nNo. of characters : %d\n", nochars);
+     printf("\nNo. of words      : %d\n", nowords);
+     printf("\nNo. of Lines      : %d\n", nolines);
 }
