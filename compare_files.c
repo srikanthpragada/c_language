@@ -1,17 +1,29 @@
 #include <stdio.h>
 
+FILE * open(char filename[])
+{
+  FILE * fp;
+    fp = fopen(filename,"r");
+    if (fp == NULL)
+    {
+        printf("\n[%s] not found.\n",filename);
+        exit(1); // terminate program
+    }
+    return fp;
+}
 main()
 {
     FILE *fp1,*fp2;
     char line1[100],line2[100];
     char *cp1,*cp2;
     int res, lineno=0;
-    char filename1[100] = "f:\\c\\may6\\names1.txt";
+    char filename1[100] = "f:\\c\\may6\\names1.tt";
     char filename2[100] = "f:\\c\\may6\\names2.txt";
 
     // open files
-    fp1 = fopen(filename1,"r");
-    fp2 = fopen(filename2,"r");
+
+    fp1 = open(filename1);
+    fp2 = open(filename2);
 
     while(1)
     {
