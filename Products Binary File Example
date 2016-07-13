@@ -1,0 +1,139 @@
+#include <stdio.h>
+
+struct product
+{
+  char name[50];
+  int price;
+};
+
+
+main()
+{
+    FILE * fp;
+    int choice;
+
+    fp = fopen("products.dat","r+b");
+    if ( fp == NULL)
+    {
+      printf("Sorry! File not found!");
+      exit(1);
+    }
+
+    while(1)
+    {
+        printf("\nMenu\n");
+        printf("=========\n");
+        printf("1.Add Product\n");
+        printf("2.List Products\n");
+        printf("3.Search Products\n");
+        printf("4.Update Product\n");
+        printf("6.Exit\n");
+        printf("Your Choice [1-6] :");
+        scanf("%d",&choice);
+
+        switch(choice)
+        {
+         case 1  : add(fp); break;
+         case 2  : list(fp); break;
+         case 3  : search(fp); break;
+         case 4  : update(fp); break;
+         case 6  : fclose(fp);
+                   exit(0);
+        }
+    }
+}
+
+
+void add(FILE * fp)
+{
+   struct product p;
+
+   fseek(fp,0,2); // go to end of file
+   fflush(stdin);
+   printf("Enter product name : ");
+   gets(p.name);
+
+   printf("Enter product price: ");
+   scanf("%d",&p.price);
+
+   fwrite(&p,sizeof(p),1,fp);
+   printf("\nProduct Added Successfully!\n");
+}
+
+void list(FILE *fp)
+{
+   struct product p;
+   int count;
+
+   fseek(fp,0,0);
+
+   printf("\n\n******* List Of Products ********** \n");
+
+   while(1)
+   {
+       count = fread(&p,sizeof(p),1,fp);
+       if ( count == 0)
+          break;
+       // print
+       printf("\n%-50s %6d", p.name, p.price);
+   }
+
+   printf("\n\n");
+
+}
+
+
+void search(FILE *fp)
+{
+   struct product p;
+   int count;
+   char sword[20];
+
+   fseek(fp,0,0);  // take pointer to beginning of file
+   fflush(stdin); // clear keyboard buffer
+
+   printf("Enter search string :");
+   gets(sword);
+
+   printf("\n\n******* List Of Products ********** \n");
+
+   while(1)
+   {
+       count = fread(&p,sizeof(p),1,fp);
+       if (count == 0)
+          break;
+
+       if (strstr( p.name, sword) != NULL)
+           printf("\n%-50s %6d", p.name, p.price);
+   }
+
+   printf("\n\n");
+}
+
+
+void update(FILE * fp)
+{
+   struct product p;
+   int pno;
+
+   fflush(stdin);
+   printf("Enter product number : ");
+   scanf("%d", &pno);
+
+   fseek(fp, (pno-1) * sizeof(p),0);  // move to required product
+   fread(&p,sizeof(p),1,fp);
+
+   printf("Enter new  price     : ");
+   scanf("%d",&p.price);
+
+   fseek(fp, (pno-1) * sizeof(p),0);  // move to required product
+   fwrite(&p,sizeof(p),1,fp); // overwrite existing product
+   printf("\nProduct Updated Successfully!\n");
+}
+
+
+
+
+
+
+
