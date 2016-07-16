@@ -1,0 +1,116 @@
+// display names with length more than avg. length
+// File is  names.txt
+#include <stdio.h>
+
+struct node
+{
+   char name[20];
+   struct node * next;
+};
+
+
+
+int  exists(char name[],struct node * root)
+{
+     struct node * cur = root;
+
+     while (cur != NULL) {
+
+        if (strcmp(cur->name, name) == 0)
+            return 1;  // found
+
+        cur = cur->next;  // move to next node
+     }
+     return 0; // not found
+} // end of exists()
+
+main()
+{
+  struct node * root = NULL, * current, * previous;
+
+  FILE * fp;
+  char line[100];
+  int sum=0, count=0;
+  char * cp;
+
+     // open file
+     fp = fopen("names.txt","r"); // assume file is in current directory
+     if (fp == NULL)
+     {
+         printf("Sorry! File not found!\n");
+         exit(1);
+     }
+     while (1)
+     {
+         // read line from file
+         cp = fgets(line,100,fp);
+         if (cp == NULL) // reached EOF
+             break;
+
+         // check whether name is already present in the list
+         if(exists(line,root)) // name is already present
+            continue;
+
+         sum += strlen(line);
+         count ++;
+         // create node
+         current  = (struct node *) malloc(sizeof(struct node));
+         strcpy(current->name,line);
+         current->next = NULL;
+
+
+         if ( root == NULL)  // first node
+            root = current;
+         else
+            previous ->next = current;  // link it with previous node
+
+         // make current previous for next round
+         previous = current;
+     }
+
+     fclose(fp);
+
+     // display names from list where length of name is
+     // more than average length
+
+     int average = sum / count;
+
+     current = root;
+     while (current != NULL) {
+
+        if ( strlen( current->name) > average)
+            puts(current->name);
+
+        current = current->next;  // move to next node
+     }
+
+}
+
+
+names.txt
+=========
+Dennis
+Bob
+Bill
+Scott
+Mike
+Tim
+Tommy
+Jason
+Jackson
+Fedrer
+Jack
+Jackson
+Scott
+
+
+
+
+
+
+
+
+
+
+
+
