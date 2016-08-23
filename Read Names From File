@@ -1,0 +1,26 @@
+#include <stdio.h>
+main()
+{
+    char name[20], *p;
+    FILE * fp;
+    int ln;
+
+    fp = fopen("names.txt","r");
+    if ( fp == NULL)
+    {
+        printf("Sorry! File cannot be opened!");
+        exit(1);
+    }
+    ln=1;
+    while(1)
+    {
+        p = fgets(name,20,fp);
+        if (p == NULL)  // reached EOF
+             break;
+
+        printf("%3d: %s",ln++,name);
+    }
+
+    fclose(fp);
+
+}
