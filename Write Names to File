@@ -1,0 +1,26 @@
+#include <stdio.h>
+main()
+{
+    char name[20];
+    FILE * fp;
+
+    fp = fopen("names.txt","w");
+    if ( fp == NULL)
+    {
+        printf("Sorry! File cannot be opened!");
+        exit(1);
+    }
+    while(1)
+    {
+        printf("Enter a name [end to stop] :");
+        gets(name);
+        if (stricmp(name,"end") == 0)
+            break;
+
+        fputs(name,fp);
+        fputc('\n',fp);
+    }
+
+    fclose(fp);
+
+}
