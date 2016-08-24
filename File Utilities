@@ -1,0 +1,160 @@
+#include <stdio.h>
+
+void upper()
+{
+  char sfn[50],tfn[50];
+  FILE *sfp,*tfp;
+  int ch;
+
+  // clear keyboard buffer
+  fflush(stdin);
+
+  printf("Enter source filename :");
+  gets(sfn);
+
+  sfp = fopen(sfn,"r");
+  if (sfp == NULL)
+  {
+      printf("\nSorry! Source file could not be opened!");
+      return;
+  }
+
+  printf("Enter target filename :");
+  gets(tfn);
+
+
+  tfp = fopen(tfn,"w");
+  if (tfp == NULL)
+  {
+      printf("\nSorry! Target file could not be opened!");
+      return;
+  }
+
+  while(1)
+  {
+      ch = fgetc(sfp);
+      if (ch == EOF)
+          break;
+      fputc( toupper(ch),tfp);
+  }
+
+  fclose(sfp);
+  fclose(tfp);
+
+  printf("\nConverted [%s] to uppercase and placed in [%s]\n",sfn,tfn);
+
+}
+
+
+void lower()
+{
+  char sfn[50],tfn[50];
+  FILE *sfp,*tfp;
+  int ch;
+
+  // clear keyboard buffer
+  fflush(stdin);
+
+  printf("Enter source filename :");
+  gets(sfn);
+
+  sfp = fopen(sfn,"r");
+  if (sfp == NULL)
+  {
+      printf("\nSorry! Source file could not be opened!");
+      return;
+  }
+
+  printf("Enter target filename :");
+  gets(tfn);
+
+
+  tfp = fopen(tfn,"w");
+  if (tfp == NULL)
+  {
+      printf("\nSorry! Target file could not be opened!");
+      return;
+  }
+
+  while(1)
+  {
+      ch = fgetc(sfp);
+      if (ch == EOF)
+          break;
+      fputc( tolower(ch),tfp);
+  }
+
+  fclose(sfp);
+  fclose(tfp);
+
+  printf("\nConverted [%s] to lowercase and placed in [%s]\n",sfn,tfn);
+}
+
+void count()
+{
+  char fn[50];
+  FILE *fp;
+  int ch, chars, words, lines;
+
+  // clear keyboard buffer
+  fflush(stdin);
+
+  printf("Enter filename :");
+  gets(fn);
+
+  fp = fopen(fn,"r");
+  if (fp == NULL)
+  {
+      printf("\nSorry! File could not be opened!");
+      return;
+  }
+  chars = words = lines = 0;
+
+  while(1)
+  {
+      ch = fgetc(fp);
+      if (ch == EOF)
+         break;
+      chars++;
+      if(ch == 32)
+         words ++;
+
+      if(ch == 10)
+      {
+          words ++;
+          lines ++;
+      }
+  }
+  fclose(fp);
+  printf("\nNo. of lines : %5d",lines);
+  printf("\nNo. of words : %5d",words);
+  printf("\nNo. of chars : %5d\n",chars);
+
+}
+
+main()
+{
+    int choice;
+
+    while(1)
+    {
+        printf("\nMenu");
+        printf("\n====\n");
+        printf("1. Convert to upper\n");
+        printf("2. Convert to lower\n");
+        printf("3. Count char,words and lines\n");
+        printf("4. Exit\n");
+        printf("Enter your choice [1-3]:");
+        scanf("%d",&choice);
+        printf("\n");
+
+        switch(choice)
+        {
+            case 1 : upper(); break;
+            case 2 : lower(); break;
+            case 3 : count(); break;
+            case 4 : exit(0);
+        }
+    }
+
+}
