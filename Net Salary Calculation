@@ -1,0 +1,23 @@
+
+main()
+{
+    int salary, hra, da, netsalary;
+
+    /* take salary as input */
+    printf("Enter salary : ");
+    scanf("%d",&salary);
+
+    // calculate hra and da
+    hra = salary * 40/100;
+    da  = salary * 20/100;
+
+    // calculate net salary
+    netsalary = salary + hra + da;
+
+    // print details
+    printf("Salary    : %d\n", salary);
+    printf("HRA       : %d\n", hra);
+    printf("DA        : %d\n", da);
+    printf("Net Salary: %d\n", netsalary);
+
+}
