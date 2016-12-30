@@ -1,0 +1,72 @@
+#include <stdio.h>
+#include <string.h>
+
+int is_mobile_number(char * s)
+{
+  if (strlen(s) != 10)
+     return 0;
+
+  int i;
+
+  for(i=0; i < 10; i++)
+  {
+    if ( !isdigit(s[i]))
+       return 0;
+  }
+
+  return 1;
+}
+
+// removes newline that is at the end of the string
+void remove_newline(char * s)
+{
+    int i;
+
+    for(i = 0; s[i] ; i++)
+    {
+        if ( s[i] == '\n')
+        {
+             s[i] = '\0';
+             break;
+        }
+    }
+}
+
+main()
+{
+ FILE * fp;
+ int lineno = 0;
+ char * p;
+ char line[100];
+
+
+    fp = fopen("mobilenumbers.txt","r");
+    if(fp == NULL)
+    {
+      printf("File cannot be opened!");
+      exit(1);
+    }
+
+    while(1)
+    {
+       p = fgets(line,100,fp);
+       if (p == NULL)
+        break;
+
+
+       // remove newline (\n) at the end
+       remove_newline(line);
+       lineno++;
+
+       if (strlen(line) == 0)
+          continue;
+
+       if ( !is_mobile_number(line))
+         printf("%2d: %s\n", lineno, line);
+
+
+    }
+
+    fclose(fp);
+
+}
