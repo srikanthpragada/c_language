@@ -1,0 +1,159 @@
+#include <stdio.h>
+
+struct product
+{
+    char name[50];
+    int price;
+    char status;
+};
+
+void add_product(FILE * fp)
+{
+    struct product p;
+
+      fflush(stdin);  // clear keyboard buffer
+
+      printf("Product Name  :");
+      gets(p.name);
+
+      printf("Product Price : ");
+      scanf("%d",&p.price);
+
+      p.status = 'a';
+
+      fseek(fp,0,2);  // go to end of file
+
+      fwrite(&p,sizeof(p),1,fp);  // write a record
+
+      printf("\nProduct added successfully!\n");
+}
+
+void search_product(FILE * fp)
+{
+    struct product p;
+    int id,c;
+
+        printf("\nEnter product id :");
+        scanf("%d",&id);
+
+        c = fseek(fp, sizeof(p) * (id-1),0);
+        if ( c != 0)
+        {
+            printf("\nSorry! Invalid product id!\n");
+            return;
+        }
+
+        c = fread(&p,sizeof(p),1,fp);  // write a record
+        if ( c == 0)
+        {
+            printf("\nSorry! Invalid product id!\n");
+            return;
+        }
+
+        if(p.status != 'd')
+        {
+            printf("\n%-30s %6d\n", p.name, p.price);
+        }
+        else
+        {
+            printf("\nSorry! Product is not available!\n");
+        }
+}
+
+
+void delete_product(FILE * fp)
+{
+    struct product p;
+    int id,c;
+
+        printf("\nEnter product id :");
+        scanf("%d",&id);
+
+        c = fseek(fp, sizeof(p) * (id-1),0);
+        if ( c != 0)
+        {
+            printf("\nSorry! Invalid product id!\n");
+            return;
+        }
+
+        c = fread(&p,sizeof(p),1,fp);  // write a record
+        if ( c == 0)
+        {
+            printf("\nSorry! Invalid product id!\n");
+            return;
+        }
+        p.status = 'd';
+        // write back
+        fseek(fp, sizeof(p) * -1l,1); // go back by one record
+        fwrite(&p,sizeof(p),1,fp);
+        printf("\nProduct has been deleted!\n");
+
+}
+
+
+
+void list_products(FILE * fp)
+{
+    struct product p;
+
+      fseek(fp,0,0);  // go to beginning of file
+
+      int c;
+      int id = 1;
+      while(1)
+      {
+        c = fread(&p,sizeof(p),1,fp);  // write a record
+        if (c == 0)
+            break;
+
+        if(p.status != 'd')
+        {
+            printf("\n%3d %-30s %6d", id, p.name, p.price);
+        }
+
+        id++;
+      }
+
+      printf("\n*************\n");
+}
+
+
+main()
+{
+ int choice;
+ FILE * fp;
+
+     fp = fopen("products.dat","r+b");
+     if ( fp == NULL)
+     {
+         printf("Sorry! File cannot be opened!");
+         exit(1);
+     }
+
+     while(1)
+     {
+         printf("\nMenu\n");
+         printf("==============\n");
+         printf("1.Add Product\n");
+         printf("2.List Product\n");
+         printf("3.Search Product\n");
+         printf("4.Delete Product\n");
+         printf("5.Exit\n");
+         printf("Enter your choice[1-5]:");
+         fflush(stdin);
+         scanf("%d",&choice);
+
+         switch(choice)
+         {
+             case 1 : add_product(fp);
+                      break;
+             case 2 : list_products(fp);
+                      break;
+             case 3 : search_product(fp);
+                      break;
+             case 4 : delete_product(fp);
+                      break;
+             case 5 : exit(0);
+         }
+     }
+}
