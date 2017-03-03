@@ -1,0 +1,135 @@
+writebooks.c
+=============
+#include <stdio.h>
+
+struct book
+{
+  char title[50], author[30];
+};
+
+main()
+{
+  FILE * fp;
+  struct book book;
+
+
+  fp = fopen("books.dat", "ab");
+
+  while(1)
+  {
+     printf("Enter title : ");
+     gets(book.title);
+
+     if (strcmp(book.title,"end") == 0)
+       break;
+
+     printf("Enter Author  : ");
+     gets(book.author);
+
+     fwrite(&book,sizeof(book),1,fp);
+  }
+
+  fclose(fp);
+}
+
+listbooks.c
+===========
+
+#include <stdio.h>
+
+struct book
+{
+  char title[50], author[30];
+};
+
+main()
+{
+  FILE * fp;
+  struct book book;
+  int count;
+
+  fp = fopen("books.dat", "rb");
+
+  while(1)
+  {
+     count =  fread(&book,sizeof(book),1,fp);
+     if (count == 0)
+        break;
+     printf("%-30s %-30s\n", book.title, book.author);
+  }
+
+  fclose(fp);
+}
+
+booksbytopic.c
+==============
+
+#include <stdio.h>
+
+struct book
+{
+  char title[50], author[30];
+};
+
+main()
+{
+  FILE * fp;
+  struct book book;
+  char subject[10];
+  int count;
+
+  fp = fopen("books.dat", "rb");
+
+  printf("Enter subject : ");
+  scanf("%s",&subject);
+
+  while(1)
+  {
+     count =  fread(&book,sizeof(book),1,fp);
+     if (count == 0)
+        break;
+     if( strstr(book.title,subject) != 0)
+         printf("\n%-30s %-30s\n", book.title, book.author);
+  }
+
+  fclose(fp);
+}
+
+readbookbyposition.c
+====================
+#include <stdio.h>
+
+struct book
+{
+  char title[50], author[30];
+};
+
+main()
+{
+  FILE * fp;
+  struct book book;
+  int bookno,count;
+
+  fp = fopen("books.dat", "rb");
+
+  while(1)
+  {
+     printf("\nEnter book number [0 to stop] :");
+     scanf("%d",&bookno);
+
+     if (bookno == 0)
+         break;
+
+     fseek(fp,sizeof(book) * (bookno-1),0);  // position file pointer
+     count =  fread(&book,sizeof(book),1,fp); // read a book
+     if(count == 0)
+        printf("\nSorry! Book Not Found!\n");
+     else
+        printf("\n%-30s %-30s\n", book.title, book.author);
+  }
+
+  fclose(fp);
+}
+
+
+
