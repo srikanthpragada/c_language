@@ -1,0 +1,40 @@
+#include <stdio.h>
+
+main()
+{
+  char sfn[50], tfn[50];
+  FILE * sfp, * tfp;
+  char line[200];
+
+  printf("Enter source filename :");
+  gets(sfn);
+  printf("Enter target filename :");
+  gets(tfn);
+
+  sfp = fopen(sfn,"r");
+  if (sfp == NULL) //  file not opened successfully
+  {
+      printf("\nSorry! Source File Not Found!");
+      exit(1); // exit with status code 1 - error
+  }
+
+  tfp = fopen(tfn,"w");
+  if (tfp == NULL) //  file not opened successfully
+  {
+      printf("\nSorry! Could not create target file!");
+      exit(2);
+  }
+
+  while(1)
+  {
+      if (fgets(line,200,sfp) == NULL)   // reached end of file
+           break;
+
+      if (strlen(line) > 1)  // one char is \n at the end
+           fputs(line,tfp);
+  }
+
+  fclose(tfp);
+  fclose(sfp);
+
+}
