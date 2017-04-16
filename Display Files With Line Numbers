@@ -1,0 +1,36 @@
+#include <stdio.h>
+
+main(int argc, char  * argv[])
+{
+  FILE * fp;
+  char line[200];
+  int i,lineno;
+
+
+  if ( argc == 1)
+  {
+      printf("Usage : DisplayFile  <filename> ... \n");
+      exit(1);
+  }
+
+  for(i=1; i < argc ; i ++)
+  {
+    lineno=1;
+    fp = fopen(argv[i],"r");
+    if (fp == NULL) //  file not opened successfully
+    {
+      printf("\n\nSorry! [%s] File Not Found!\n\n", argv[i]);
+      continue;
+    }
+    printf("\n********%s***********\n\n", argv[i]);
+    while(1)
+    {
+      if (fgets(line,200,fp) == NULL)   // reached end of file
+           break;
+      printf("%4d: %s", lineno,line);
+      lineno++;
+    }
+
+    fclose(fp);
+  }
+}
