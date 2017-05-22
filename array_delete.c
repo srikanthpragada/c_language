@@ -12,11 +12,11 @@ main()
       a[i] = rand()%100;
       printf("%d\t", a[i]);
   }
-  printf("\nEnter position :[0-9]");
+  printf("\nEnter position [0-9] : ");
   scanf("%d",&pos);
 
   // delete by pusing elements to right
-  for(i=pos; i <10;i++)
+  for(i=pos; i < 9;i++)
   {
       a[i] = a[i+1];
   }
