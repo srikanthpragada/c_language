@@ -1,0 +1,93 @@
+
+#include <stdio.h>
+
+struct node
+{
+  char name[20];
+  struct node * next;
+};
+
+
+struct node *root,*current;
+
+main()
+{
+ FILE * fp;
+ char line[30], *p;
+
+    fp = fopen("names.txt","rt");
+    if ( fp == NULL)
+    {
+        printf("Sorry! File not opened!");
+        exit(1);
+    }
+
+    root = NULL;
+
+    while(1)
+    {
+        p = fgets(line,30,fp);
+        if (p == NULL)
+             break;
+
+        if (strlen(line) < 2)
+           continue;
+
+        printf("\nRead : %s", line);
+        // create a node to store name
+        current = (struct node *) malloc(sizeof(struct node));
+        strcpy(current->name,line);
+
+        if (current == NULL)
+        {
+            printf("Sorry! Insufficient memory!");
+            exit(2);
+        }
+
+        if (root == NULL) {
+            current ->next = NULL;
+            root = current;
+            printf("Setting root\n");
+        }
+        else
+        {
+            // find out position of the new node
+            struct node *curnode ,*prenode;
+
+            curnode = prenode = root;
+            while(curnode != NULL)
+            {
+                puts(curnode ->name);
+                if (strcmp(curnode->name,line) > 0)
+                    break;
+                prenode = curnode;
+                curnode = curnode ->next;
+            }
+            // now insert node
+            if (root == curnode)  // insert at the beginning
+            {
+                current->next = root;
+                root = current;
+            }
+            else  // insert in the middle  or at end
+            {
+                current -> next = prenode->next;
+                prenode->next = current;
+            }
+        } // else
+    } // end of while()
+
+    fclose(fp);
+
+    current = root;
+    while(current != NULL) {
+        printf("%s",current->name);
+        current = current -> next;
+    }
+
+}
+
+
+
+
+
