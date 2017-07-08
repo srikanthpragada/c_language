@@ -1,0 +1,168 @@
+write_students.c
+===============
+#include <stdio.h>
+
+
+struct student
+{
+  int admno;
+  char name[30];
+};
+
+main()
+{
+  struct student s1;
+  FILE * fp;
+
+
+     fp = fopen("students.dat","wb");
+     if ( fp == NULL)
+     {
+       printf("Sorry! Could not create file!");
+       exit(1);
+     }
+
+     while(1)
+     {
+        printf("Enter admno :");
+        scanf("%d",&s1.admno);
+        if (s1.admno == 0)
+          break;
+
+        scanf("%s", s1.name);
+
+        fwrite(&s1, sizeof(s1),1,fp);
+     }
+
+     fclose(fp);
+}
+
+
+read_students.c
+===============
+#include <stdio.h>
+
+
+struct student
+{
+  int admno;
+  char name[30];
+};
+
+main()
+{
+  struct student s1;
+  FILE * fp;
+  int count;
+
+     fp = fopen("students.dat","rb");
+     if ( fp == NULL)
+     {
+       printf("Sorry! Could not create file!");
+       exit(1);
+     }
+
+     while(1)
+     {
+        count = fread(&s1, sizeof(s1),1,fp);
+        if ( count ==  0)
+            break;
+
+        printf("\n%5d %-20s",s1.admno,s1.name);
+     }
+
+     fclose(fp);
+}
+
+update_student.c
+===============
+#include <stdio.h>
+
+struct student
+{
+  int admno;
+  char name[30];
+};
+
+main()
+{
+  struct student s1;
+  FILE * fp;
+  int count, admno;
+
+     fp = fopen("students.dat","r+b");
+     if ( fp == NULL)
+     {
+       printf("Sorry! Could not create file!");
+       exit(1);
+     }
+
+     while(1)
+     {
+        printf("\nEnter admno [0 to stop] :");
+        scanf("%d",&admno);
+
+        if (admno == 0)
+             break;
+
+        fseek(fp, sizeof(struct student) * (admno-1), 0);
+        count = fread(&s1, sizeof(s1),1,fp);
+        if (count == 1)
+        {
+            printf("\nEnter new name : ");
+            scanf("%s",s1.name);
+            // reset to same position
+            fseek(fp, sizeof(struct student) * (admno-1), 0);
+            fwrite(&s1, sizeof(struct student), 1,fp);
+            printf("\nName successfully updated!\n");
+        }
+        else
+               printf("\nSorry! Could not read student!\n");
+     } // while
+
+     fclose(fp);
+}
+
+
+search_student.c
+================
+#include <stdio.h>
+
+
+struct student
+{
+  int admno;
+  char name[30];
+};
+
+main()
+{
+  struct student s1;
+  FILE * fp;
+  int count, admno;
+
+     fp = fopen("students.dat","rb");
+     if ( fp == NULL)
+     {
+       printf("Sorry! Could not create file!");
+       exit(1);
+     }
+
+     while(1)
+     {
+        printf("\nEnter admno [0 to stop] :");
+        scanf("%d",&admno);
+
+        if (admno == 0)
+             break;
+
+        fseek(fp, sizeof(struct student) * (admno-1), 0);
+        count = fread(&s1, sizeof(s1),1,fp);
+        if (count ==1)
+                printf("\n%s\n",s1.name);
+        else
+               printf("\nSorry! Could not read student!\n");
+     } // while
+
+     fclose(fp);
+}
