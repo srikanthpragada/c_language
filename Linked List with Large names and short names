@@ -1,0 +1,105 @@
+#include <stdio.h>
+
+struct node
+{
+   char name[50];
+   struct node * next;
+};
+
+int name_exists(struct node * current, char * name)
+{
+    while(current != NULL)
+    {
+        if (strcmp(current->name, name) == 0 )
+              return 1; // name found
+
+        current = current -> next;
+    }
+
+    return 0; // name not found
+}
+
+main()
+{
+  struct node * root, * prev, * current;
+  FILE * fp;
+  char line[50];
+
+
+   fp  = fopen("..\\names.txt","r");
+   if ( fp == NULL)
+   {
+      printf("Sorry! File not found!");
+      exit(1);
+   }
+
+   root = NULL;
+
+   int total =0, count = 0;
+
+   while (1)
+   {
+       if ( fgets(line,50,fp) == NULL )
+             break;
+
+       if ( strlen(line) == 1)  // empty line
+              continue;
+
+       if ( name_exists(root,line))  // ignore duplicates
+              continue;
+
+       // create a node to add name to list
+       current = (struct node *) malloc(sizeof(struct node));
+       if(current == NULL)
+       {
+          printf("Sorry! Insufficient memory!");
+          exit(2);
+       }
+
+       count ++;
+       total +=  strlen(line);
+
+       current -> next = NULL;
+       strcpy(current -> name,line);
+
+       // if it is first node then make root point to it
+
+       if(root == NULL)
+         root = current;
+       else
+          prev -> next = current;  // mak prev point to current node
+
+       prev = current;
+   }
+
+   fclose(fp);
+
+
+   // display list
+   int avg = total / count;
+
+   printf("\nLarge Names\n");
+   printf("===============\n");
+   current = root;
+   while( current != NULL)
+   {
+       if (strlen(current->name) >= avg)
+            printf("%s", current -> name);
+
+       current = current -> next;
+   }
+
+
+
+    // display list
+   printf("\nShort Names\n");
+   printf("===============\n");
+   current = root;
+   while( current != NULL)
+   {
+       if (strlen(current->name) < avg)
+            printf("%s", current -> name);
+
+       current = current -> next;
+   }
+}
