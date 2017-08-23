@@ -1,0 +1,117 @@
+#include <stdio.h>
+#define  FILENAME "products.dat"
+
+struct product
+{
+   char name[30];
+   int price;
+};
+
+void list_products()
+{
+  FILE * fp;
+  struct product p;
+  int count;
+
+
+     fp = fopen(FILENAME, "rb");
+
+     printf("\n********* LIST OF PRODUCTS *************\n");
+
+     while(1)
+     {
+       count = fread(&p, sizeof(p), 1, fp);
+       if ( count == 0)
+         break;
+
+       printf("\n%-30s  %10d", p.name, p.price);
+     }
+
+     fclose(fp);
+
+     printf("\n\n");
+
+}
+
+void add_product()
+{
+  FILE * fp;
+  struct product p;
+
+
+     fp = fopen(FILENAME, "ab");
+     while(1)
+     {
+       // empty keyboard buffer
+       fflush(stdin);
+
+       printf("\nEnter product name [enter to stop] : ");
+       gets(p.name);
+
+       if (strlen(p.name)== 0)
+          break;
+
+       printf("Enter product price : ");
+       scanf("%d",&p.price);
+
+       fwrite(&p, sizeof(p), 1, fp);
+     }
+
+     fclose(fp);
+}
+
+
+void search_product()
+{
+  FILE * fp;
+  struct product p;
+  int count,id;
+
+
+     fp = fopen(FILENAME, "rb");
+
+     while(1)
+     {
+     printf("\nEnter product id [0 to stop] : ");
+     scanf("%d",&id);
+     if ( id == 0)
+         break;
+
+     fseek(fp, (id - 1) * sizeof(p), 0) ;
+     count = fread(&p, sizeof(p), 1, fp);
+     if (count == 0)
+         printf("\nProduct Not Found\n");
+     else
+         printf("\n%-30s  %10d", p.name, p.price);
+
+     }
+     fclose(fp);
+     printf("\n\n");
+}
+
+
+main()
+{
+int choice;
+
+    while(1)
+    {
+      printf("\n **** MENU *****\n");
+      printf("\n1. List Products");
+      printf("\n2. Add Product");
+      printf("\n3. Search Product");
+      printf("\n4. Exit");
+
+      printf("\nChoice [1-4]: ");
+
+      scanf("%d",&choice) ;
+
+      switch(choice)
+      {
+         case 1 : list_products(); break;
+         case 2 : add_product(); break;
+         case 3 : search_product(); break;
+         case 4: exit(0);
+      }
+    }
+}
