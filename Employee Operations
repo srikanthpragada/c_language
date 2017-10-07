@@ -137,4 +137,50 @@ main()
      fclose(fp);
 }
 
+DisplayEmployee.c  (Takes employee id on command line and displays details of employee)
+================
+#include <stdio.h>
+
+struct employee
+{
+    char name[20];
+    int salary;
+};
+
+main(int argc, char * argv[])
+{
+ FILE * fp;
+ struct employee emp;
+ int empid, result;
+
+     if(argc == 1)
+     {
+         printf("\nPlease provide employee id.\nExample : c:>DisplayEmployee 3\n");
+         return;
+     }
+
+     fp = fopen("emp.dat","rb");
+     if (fp == NULL)
+     {
+        printf("\nSorry!File could not be opened!\n");
+        exit(1);
+     }
+
+     empid = atoi(argv[1]);
+
+     // move to required record
+     fseek(fp, (empid - 1) * sizeof(emp),0);
+     result = fread(&emp,sizeof(emp),1,fp);
+
+     if (result == 1)
+     {
+          printf("\nName    : %s", emp.name);
+          printf("\nSalary  : %d\n", emp.salary);
+     }
+     else
+          printf("\nSorry! Employee Not Found\n");
+
+     fclose(fp);
+}
+
 
