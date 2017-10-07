@@ -1,0 +1,140 @@
+WRITEEMP.C
+============
+// Write employee details to emp.dat
+
+#include <stdio.h>
+
+struct employee
+{
+    char name[20];
+    int salary;
+};
+
+main()
+{
+ FILE * fp;
+ struct employee emp;
+
+     fp = fopen("emp.dat","ab");
+     if (fp == NULL)
+     {
+        exit(1);
+     }
+
+     while (1)
+     {
+        fflush(stdin);  // clear keyboard buffer
+
+        printf("Enter name [enter to stop]:");
+        gets(emp.name);
+
+        if (strlen(emp.name) == 0)
+            break;
+
+        printf("Enter salary :");
+        scanf("%d",&emp.salary);
+        // write employee details to file
+        fwrite(&emp,sizeof(emp), 1, fp);
+     }
+
+     fclose(fp);
+
+}
+
+
+READEMP.C
+=========
+#include <stdio.h>
+
+struct employee
+{
+    char name[20];
+    int salary;
+};
+
+main()
+{
+ FILE * fp;
+ struct employee emp;
+ int empid, result;
+
+     fp = fopen("emp.dat","rb");
+     if (fp == NULL)
+     {
+        exit(1);
+     }
+
+     while (1)
+     {
+        printf("Enter employee id [0 to stop]:");
+        scanf("%d",&empid);
+
+        if (empid == 0)
+            break;
+
+        // move to required record
+        fseek(fp, (empid - 1) * sizeof(emp),0);
+        result = fread(&emp,sizeof(emp),1,fp);
+
+        if (result == 1)
+          printf("\n%s  %d\n", emp.name, emp.salary);
+        else
+          printf("\nSorry! Employee Not Found\n");
+
+     }
+
+     fclose(fp);
+}
+
+UPDATESALAY.C
+==============
+#include <stdio.h>
+
+struct employee
+{
+    char name[20];
+    int salary;
+};
+
+main()
+{
+ FILE * fp;
+ struct employee emp;
+ int empid, result;
+
+     fp = fopen("emp.dat","r+b");  // open read write mode
+     if (fp == NULL)
+     {
+        printf("Open error");
+        exit(1);
+     }
+
+     while (1)
+     {
+        printf("Enter employee id [0 to stop]:");
+        scanf("%d",&empid);
+
+        if (empid == 0)
+            break;
+
+        // move to required record
+        fseek(fp, (empid - 1) * sizeof(emp),0);
+        result = fread(&emp,sizeof(emp),1,fp);
+
+        if (result == 1)
+        {
+          printf("\n%s  %d\n", emp.name, emp.salary);
+          printf("\nEnter new salary : ");
+          scanf("%d",&emp.salary);
+          // write emp record back to file
+          fseek(fp, (empid - 1) * sizeof(emp),0);
+          fwrite(&emp,sizeof(emp),1,fp);
+        }
+        else
+          printf("\nSorry! Employee Not Found\n");
+     }
+
+     fclose(fp);
+}
+
+
