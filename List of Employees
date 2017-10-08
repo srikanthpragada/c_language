@@ -1,0 +1,63 @@
+// Display employees who have more salary than average salary
+// Uses file emp.dat which contains records of type struct employee 
+
+#include <stdio.h>
+
+struct employee
+{
+   char name[20];
+   int salary;
+};
+
+struct node
+{
+   struct employee data;
+   struct node * next;
+};
+
+main()
+{
+  FILE * fp;
+  struct employee emp;
+  struct node * root = NULL, * current, * prev;
+  int count, total = 0, countemp = 0, avg;
+
+    fp = fopen("emp.dat","rb");
+    while(1)
+    {
+        count = fread(&emp,sizeof(emp),1,fp);
+        if ( count == 0)
+             break;
+
+        // add name to list
+        current = (struct node *)  malloc(sizeof(struct node));
+        current->data = emp;
+
+        total += emp.salary;
+        countemp++;
+
+        current->next = NULL;
+
+        if (root == NULL)
+           root = current;
+        else
+           prev->next = current;
+
+        prev = current;
+    }
+
+    fclose(fp);
+
+    avg = total / countemp;
+
+    current = root;
+    while(current != NULL)
+    {
+        if (current->data.salary > avg)
+            printf("%-20s %d\n", current->data.name, current->data.salary);
+        current = current->next;
+    }
+
+}
+
+
