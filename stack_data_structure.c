@@ -1,5 +1,4 @@
 // STACK
-// Prints lines from a file in reverse order - last line first 
 #include <stdio.h>
 
 
@@ -7,7 +6,7 @@ struct node
 {
   char name[30];
   struct node * prev;
-} *root = NULL ,*current, *prev;
+} *root,*current, *prev = NULL;
 
 
 main()
@@ -28,13 +27,8 @@ main()
         current = (struct node *) malloc( sizeof(struct node));
         strcpy(current->name, line);
 
-
-        if(root == NULL)  // First node?
-          current->prev = NULL;
-        else
-          current->prev = prev;  // Make prev one point to current one
-
-        prev = current; // make current one prev for next round
+        current->prev = prev;
+        prev = current;
         root = current;
      }
 
