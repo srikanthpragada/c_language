@@ -1,0 +1,99 @@
+// Converts names in names.txt to uppercase and writes them back into same file 
+// Using linked list 
+#include <stdio.h>
+
+struct node
+{
+   char name[30];
+   struct node * next;
+};
+
+
+main()
+{
+   FILE * fp;
+   char name[30];
+   struct node * root = NULL, * current, * prev;
+
+     fp = fopen("f:\\c\\nov28\\names.txt","r");
+     if ( fp == NULL)
+     {
+       printf("Sorry! File cannot be opened!");
+       exit(1);
+     }
+
+     while(1)
+     {
+        if (fgets(name,30,fp) == NULL)
+            break;
+
+        if (strlen(name)==1) // only \n is present
+            continue;
+
+
+        // create a node and put name in that node
+        current = (struct node *) malloc( sizeof(struct node));
+        if(current == NULL)
+        {
+           printf("Sorry! Memory allocation problem!");
+           exit(2);
+        }
+
+        strcpy(current->name, name);
+        current->next = NULL;
+
+        if (root == NULL)  // first node
+           root = current;
+        else  // second or after, make prev node point to current
+           prev -> next = current;
+
+        prev = current; // make current prev for next round
+     }
+
+     fclose(fp);
+
+     fp = fopen("f:\\c\\nov28\\names.txt","w");
+     if ( fp == NULL)
+     {
+       printf("Sorry! File cannot be opened! for writing");
+       exit(3);
+     }
+
+     // print list
+
+     current = root;
+     while(current != NULL)
+     {
+         fprintf(fp, strupr(current->name));
+         current = current -> next;
+     }
+
+     fclose(fp);
+
+     printf("\nConverted File to uppercase!\n");
+}
+
+
+names.txt (input)
+==================
+Bill
+Mark
+Larry
+Sergy
+
+Tim
+Jeff
+
+Elon
+
+names.txt (Output)
+==================
+BILL
+MARK
+LARRY
+SERGY
+TIM
+JEFF
+ELON
+
+
