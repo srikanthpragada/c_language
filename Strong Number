@@ -1,0 +1,31 @@
+// Strong number
+
+#include <stdio.h>
+
+main()
+{
+ int num, org_num, digit,fact,i, total = 0;
+
+    printf("Enter a number :");
+    scanf("%d",&num);
+
+    org_num = num;
+    while(num)
+    {
+        digit = num % 10;   // take rightmost digit
+
+        // calculate factorial of digit
+        fact = 1;
+        for(i=1; i <= digit; i ++)
+              fact *= i;
+
+        total += fact;
+
+        num /= 10;   // remove rightmost digit
+    }
+
+    if (org_num == total)
+         printf("Strong number");
+    else
+         printf("Not a strong number");
+}
