@@ -1,0 +1,46 @@
+// Common chars count
+
+int is_present(char s[20], char ch)
+{
+ int i;
+
+    for(i=0; s[i] ; i ++)
+    {
+       if(s[i] == ch)
+         return 1;
+    }
+    return 0;
+}
+
+
+main()
+{
+    char st1[20] = "Programming";
+    char st2[20] = "Java Program";
+    int count =0,i,j, found;
+
+    for(i=0; st2[i]; i++)
+    {
+       found = 0;
+       for(j=0; j < i; j++)
+       {
+           if(st2[j] == st2[i])
+           {
+                found = 1;
+                break;
+           }
+       }
+
+       if (found)
+           continue;
+
+
+       if(is_present(st1, st2[i]))
+           count ++;
+    }
+
+    printf("%d",count);
+
+}
+
+
