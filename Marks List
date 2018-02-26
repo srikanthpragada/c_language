@@ -1,0 +1,81 @@
+#include<stdio.h>
+
+get_name_marks(char * line, char * name, int * marks)
+{
+
+    int i=0, p=0;
+    char smarks[5];
+
+     // skip until we find  first comma (,)
+     while (line[i] != ',')
+        i++;
+
+     i++;
+     while( line[i] != ',')   // look for second comma (,)
+     {
+         name[p] = line[i];
+         p++;
+         i++;
+     }
+     name[p] = 0; // null char at the end
+
+     // take marks
+     i++;
+     p = 0;
+     while( line[i] != '\n')
+     {
+        smarks[p] = line[i];
+        p++;
+        i++;
+     }
+
+     smarks[p] = 0; // marks in string form
+     *marks = atoi(smarks);
+
+}
+
+
+int main() {
+   FILE *fp;
+   char line[100], name[20], result[20];
+   int marks;
+   char * cp;
+
+   fp = fopen("marks.txt", "r");
+
+   printf("\n ********* Marks List *********\n");
+
+   while (1)
+   {
+      cp = fgets(line,100,fp);
+      if (cp == NULL)
+        break;
+
+      if(strchr(line, ','))   // ignore line that don't have comma
+      {
+         get_name_marks(line,name,&marks);
+         if (marks >= 50)
+             strcpy(result,"Passed");
+         else
+             strcpy(result,"Failed");
+
+         printf("%-20s  %5d  %s\n", name, marks, result);
+      }
+   }
+
+   fclose(fp);
+
+}
+
+
+marks.txt
+=========
+1,Bill,60
+2,Mike,80
+3,Steve,40
+4,Richards,80
+5,Cathy,70
+
+
+
+
