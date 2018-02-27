@@ -1,0 +1,132 @@
+// Store and manipulate data related to students
+
+#include <stdio.h>
+#define  FILENAME  "students.dat"
+struct student {
+   int  admno;
+   char name [30];
+   int  marks;
+};
+
+
+main()
+{
+  int choice;
+  FILE * fp;
+
+
+    // open file
+    fp = fopen(FILENAME,"r+b");
+    if (fp == NULL)
+    {
+        fp = fopen(FILENAME,"w+b");
+        if (fp == NULL)
+        {
+          printf("Sorry! File could not be opened. Quitting....\n");
+          exit(1);
+        }
+    }
+
+    while(1)
+    {
+       printf("\n *** MENU ******\n");
+       printf("\n1. Add Student\n");
+       printf("\n2. List Students\n");
+       printf("\n3. Update Student\n");
+       printf("\n4. Exit\n");
+       printf("\nChoice :[1-4] :");
+       scanf("%d",&choice);
+
+       switch(choice)
+       {
+          case 1 : add_student(fp); break;
+          case 2 : list_students(fp); break;
+          case 3 : update_student(fp); break;
+          case 4 : exit(0);
+       }
+    }
+}
+
+void add_student(FILE * fp)
+{
+   struct student s;
+   int count;
+
+       printf("Enter admno : ");
+       scanf("%d", &s.admno);
+
+       fflush(stdin);
+
+       printf("Enter name  : ");
+       gets(s.name);
+
+       printf("Enter marks : ");
+       scanf("%d",&s.marks);
+
+       // go to end of the file
+       fseek(fp,0, SEEK_END);
+       // Write student block at the end
+       count = fwrite(&s, sizeof(s), 1,fp);
+       if ( count == 1)
+           printf("\nAdded Student SuccessfullY!\n");
+
+}
+
+
+void list_students(FILE * fp)
+{
+   struct student s;
+   int count;
+
+
+       // go to beginning of the file
+       fseek(fp,0, SEEK_SET);
+
+       printf("\n\n*****  Students List ********\n\n");
+
+       while(1)
+       {
+           count = fread(&s,sizeof(s),1,fp);
+           if (count != 1)
+            break;
+
+           printf("%4d  %-30s  %3d\n", s.admno, s.name, s.marks);
+       }
+}
+
+
+void update_student(FILE * fp)
+{
+   struct student s;
+   int count, admno;
+
+
+       // go to beginning of the file
+       fseek(fp,0, SEEK_SET);
+
+       printf("\nEnter admno : ");
+       scanf("%d",&admno);
+
+       while(1)
+       {
+           count = fread(&s,sizeof(s),1,fp);
+           if (count != 1)
+              break;
+
+           if (s.admno == admno)
+           {
+               printf("\nEnter Marks : ");
+               scanf("%d",&s.marks);
+               // go back to previous block
+               fseek(fp,  sizeof(s) * -1l ,SEEK_CUR);
+               // Overwrite the block with block in memory
+               count = fwrite(&s, sizeof(s), 1,fp);
+               if (count == 1)
+                       printf("\n\nUpdated Student SuccessfullY!\n\n");
+               else
+                       printf("\n\nSorry! Unable to update student.\n\n");
+
+               break;
+           }
+       }
+}
