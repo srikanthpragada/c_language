@@ -1,0 +1,62 @@
+WriteMarks.c
+=============
+// Wrte Marks to marks.txt
+
+#include <stdio.h>
+main()
+{
+  FILE * fp;
+  int marks;
+
+      fp = fopen("marks.txt","w");  // open file in write mode
+      if(fp == NULL)
+      {
+          printf("Sorry! Could not open file. Quitting...");
+          return;
+      }
+      while(1)
+      {
+          printf("Enter marks [0 to stop] : ");
+          scanf("%d",&marks);
+
+          if (marks == 0)
+             break;
+
+          fprintf(fp,"%d\n",marks);  // write a line
+      }
+      fclose(fp);
+}
+
+
+ReadMarks.c
+=============
+
+// Reads marks from marks.txt and displays average of marks
+#include <stdio.h>
+main()
+{
+  FILE * fp;
+  int total = 0, count = 0, marks;
+  char line[5];
+
+      fp = fopen("marks.txt","r");  // open file in write mode
+      if(fp == NULL)
+      {
+          printf("Sorry! Could not open file. Quitting...");
+          return;
+      }
+      while(1)
+      {
+          // Read a line from file and stop when it returns NULL
+          if (fgets(line,5,fp) == NULL)
+              break;
+
+          marks = atoi(line); // Convert string to int
+          total += marks;
+          count ++;
+          printf("%d %s",strlen(line),line);
+      }
+      fclose(fp);
+      printf("\nCount : %d, Total : %d, Average : %5.2f",count, total, total / (float) count);
+
+}
