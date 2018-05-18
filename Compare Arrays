@@ -1,0 +1,23 @@
+// Compare two arrays and displays where the don't match, otherwise displays message saying they are same 
+#include <stdio.h>
+
+main()
+{
+ int i, mismatch = 0;
+
+  int a[] = {10,20,30,35,50};
+  int b[] = {10,20,30,40,50};
+
+  for(i=0; i < 5; i++)
+  {
+     if (a[i] != b[i])
+     {
+        printf("Elements didn't match at %d position",i);
+        mismatch = 1;  // true
+        break;
+     }
+  }
+
+  if(!mismatch)
+     printf("Arrays are same!");
+}
