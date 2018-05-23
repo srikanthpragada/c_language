@@ -9,7 +9,7 @@ main()
     names[0] = '\0';  // start with empty string
     while(1)
     {
-      printf("Enter a name : ");
+      printf("Enter a name [end to stop] : ");
       gets(name);
 
       if (strcmp(name,"end") == 0)  // stop if name is "end"
