@@ -1,0 +1,101 @@
+write_customers.c
+=================
+#include <stdio.h>
+
+struct customer
+{
+  char name[20], mobile[15], email[50];
+};
+
+main()
+{
+   FILE  * fp;
+   struct customer c;
+
+   fp = fopen("customers.dat","wb");
+
+   while(1)
+   {
+      printf("Enter customer name   : ");
+      gets(c.name);
+      if (strcmp(c.name,"end") == 0)
+         break;
+      printf("Enter customer mobile : ");
+      gets(c.mobile);
+
+      printf("Enter customer email  : ");
+      gets(c.email);
+
+      fwrite(&c, sizeof(c),1,fp);
+   }
+
+   fclose(fp);
+}
+
+
+
+list_customers.c
+=================
+#include <stdio.h>
+#define  FILENAME  "customers.dat"
+struct customer
+{
+  char name[20], mobile[15], email[50];
+};
+
+main()
+{
+   FILE  * fp;
+   struct customer c;
+   int count;
+
+   fp = fopen(FILENAME,"rb");
+   while(1)
+   {
+     count =  fread(&c,sizeof(c),1,fp);
+     if (count == 0) // EOF
+        break;
+     printf("\n%-20s %-15s %-50s", c.name,c.mobile, c.email);
+   }
+
+   fclose(fp);
+}
+
+
+update_customer.c
+=================
+#include <stdio.h>
+#define  FILENAME  "customers.dat"
+
+struct customer
+{
+  char name[20], mobile[15], email[50];
+};
+
+main()
+{
+   FILE  * fp;
+   struct customer c;
+   int count,id,pos;
+
+   fp = fopen(FILENAME,"r+b");
+   printf("Enter customer id : ");
+   scanf("%d",&id);
+   pos = (id- 1) * sizeof(struct customer);
+   fseek(fp,pos, SEEK_SET); // Move to given offset from start of file
+   count =  fread(&c,sizeof(c),1,fp);
+   if (count == 0) // EOF
+   {
+       printf("Sorry! Customer Id Not Found");
+       exit(0);
+   }
+   fflush(stdin);
+   printf("Enter new mobile number :");
+   gets(c.mobile);
+   fseek(fp,pos, SEEK_SET);
+   fwrite(&c,sizeof(c),1,fp);
+   fclose(fp);
+   printf("Updated Mobile Successfully!");
+}
+
+
