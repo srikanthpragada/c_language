@@ -1,5 +1,5 @@
-// Search for contacts by take name on command line 
-// Uses file contacts.dat in current directory 
+// Search for contacts by take name on command line
+// Uses file contacts.dat in current directory
 
 # include <stdio.h>
 
@@ -23,6 +23,12 @@ main(int argc, char * argv[])
       }
 
       fp = fopen("contacts.dat","rb");
+      if (fp == NULL)
+      {
+          printf("Sorry! File cannot be opened!");
+          return;
+      }
+
       while(1)
       {
         count = fread(&c,sizeof(c),1,fp);
