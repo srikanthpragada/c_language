@@ -1,0 +1,47 @@
+// Places marks read from file into linked list in sorted order
+#include <stdio.h>
+
+struct node
+{
+    char name[20];
+    struct node * prev;
+};
+
+main()
+{
+struct node * root = NULL,*cur, * prev = NULL, *newnode;
+
+FILE * fp;
+char name[20];
+char  * p;
+
+  fp =  fopen("names.txt","r");
+  if (fp == NULL)
+  {
+     printf("Sorry! File not found!");
+     return;
+  }
+
+  while(1)
+  {
+      p = fgets(name,100,fp);
+      if (p == NULL)
+         break;
+      // create new node
+      newnode = (struct node *) malloc(sizeof(struct node));
+      strcpy(newnode->name,name);
+      newnode->prev = prev;
+      root = newnode;
+      prev = newnode;
+  }
+
+  fclose(fp);
+
+  // print list
+  cur = root;
+  while (cur!= NULL)
+  {
+     printf("%s",cur->name);
+     cur = cur->prev;
+  }
+} // main()
