@@ -1,0 +1,93 @@
+// Write products info into PRODUCTS.DAT
+#include <stdio.h>
+
+struct product
+{
+   char name[30];
+   int price;
+};
+
+main()
+{
+   FILE * fp;
+   struct product p;
+
+      fp = fopen("products.dat","wb");
+      while(1)
+      {
+         fflush(stdin); // clear keyboard buffer
+         printf("Enter product name [press enter to stop]:");
+         gets(p.name);
+         if (strlen(p.name) == 0)
+           break;
+
+         printf("Enter product price:");
+         scanf("%d",&p.price);
+         fwrite(&p,sizeof(p),1,fp);
+      }
+
+      fclose(fp);
+}
+
+----------------------------------------
+// Read and list products from Products.dat
+
+#include <stdio.h>
+struct product
+{
+   char name[30];
+   int price;
+};
+
+main()
+{
+   FILE * fp;
+   struct product p;
+   int count;
+
+      fp = fopen("products.dat","rb");
+      while(1)
+      {
+         count = fread(&p,sizeof(p),1,fp);
+         if (count == 0)
+            break;
+
+         printf("\n%-30s %6d",p.name,p.price);
+      }
+      fclose(fp);
+}
+
+----------------------------
+
+
+// Take position and display product at that position 
+#include <stdio.h>
+
+struct product
+{
+   char name[30];
+   int price;
+};
+
+main()
+{
+   FILE * fp;
+   struct product p;
+   int count,pos,offset;
+
+      fp = fopen("products.dat","rb");
+      while(1)
+      {
+          printf("Enter position : ");
+          scanf("%d",&pos);
+          if (pos == 0)
+            break;
+
+          offset = (pos - 1) *  3 //sizeof(struct product);
+          fseek(fp,offset,SEEK_SET);
+          fread(&p,sizeof(p),1,fp);
+          printf("\n%-30s %6d\n",p.name,p.price);
+      }
+
+      fclose(fp);
+}
