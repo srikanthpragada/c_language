@@ -158,5 +158,4 @@ void search_contacts()
        fclose(fp);
        printf("\nPress a key to continue...\n");
        getch();
-
 }
