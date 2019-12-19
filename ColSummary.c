@@ -19,7 +19,7 @@ main()
         {
 
             a[i][j] = rand() % 100;
-            a[5][i] += a[i][j];
+            a[5][j] += a[i][j];
             printf("%d\t", a[i][j]);
         }
         printf("\n");
