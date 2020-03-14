@@ -1,37 +1,44 @@
-/* Bubble Sort  - Praneeth Pragada*/
+/* Bubble Sort */
+
 #include <stdio.h>
 #include<time.h>
+
 int main()
 {
-  int array[100], n, i, j, swap;
-  srand((unsigned int)time(NULL));
+  int array[10], n, i, j, temp, swapped;
 
-  printf("Enter number of elements :\n");
-  scanf("%d", &n);
+  // Initialize random seed
+  srand(time(0));
 
-  for (i=0;i<n;i++)
+  for (i=0;i < 10;i++)
     array[i]=rand()%100;
 
-  printf("Array before sorting :\n");
+  printf("Array before sorting : ");
 
-  for (i=0;i<n;i++)
-    printf("%d ", array[i]);
+  for (i=0;i < 10;i++)
+    printf("%5d", array[i]);
 
-  for (i=0;i<(n-1);i++)
+  for (i=0;i < 9;i++)
   {
-    for (j=0;j<(n-i-1);j++)
+    swapped = 0;  // False
+    for (j=0;j < 9-i;j++)
     {
-      if (array[j]>array[j+1])
+      if (array[j] > array[j+1])
       {
-          swap       = array[j];
-          array[j]   = array[j+1];
-          array[j+1] = swap;
+          temp = array[j];
+          array[j] = array[j+1];
+          array[j+1] = temp;
+          swapped = 1;  // True
       }
     }
+
+    // if no swapping was done then array is sorted and quit outer loop
+    if (!swapped)
+        break;
   }
 
-  printf("\nArray after sorting :\n");
+  printf("\nArray after sorting  : ");
 
-  for (i=0;i<n;i++)
-     printf("%d ", array[i]);
+  for (i=0;i < 10;i++)
+     printf("%5d", array[i]);
 }
